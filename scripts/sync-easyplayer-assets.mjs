@@ -7,14 +7,18 @@ const root = resolve(__dirname, '..');
 
 const possibleSourceDirs = [
   resolve(root, 'public', 'assets', 'easyplayer'),
-  resolve(root, 'src', 'runtime'),
+  resolve(root, 'dist', 'assets', 'easyplayer'),
+  resolve(root, 'playground', 'public', 'assets', 'easyplayer'),
 ];
 
 let sourceDir = null;
 for (const dir of possibleSourceDirs) {
-  if (existsSync(dir) && readdirSync(dir).length > 0) {
-    sourceDir = dir;
-    break;
+  if (existsSync(dir)) {
+    const files = readdirSync(dir);
+    if (files.some((f) => f.endsWith('.js') || f.endsWith('.wasm'))) {
+      sourceDir = dir;
+      break;
+    }
   }
 }
 
@@ -26,7 +30,7 @@ if (targets.length === 0) {
 
 if (!sourceDir) {
   console.warn('[easyplayer-vue3] No EasyPlayer runtime assets found.');
-  console.warn('[easyplayer-vue3] Please ensure assets are in public/assets/easyplayer/ or src/runtime/');
+  console.warn('[easyplayer-vue3] Please ensure assets are in public/assets/easyplayer/ or dist/assets/easyplayer/');
   console.warn('[easyplayer-vue3] Skipping asset sync...');
   process.exit(0);
 }

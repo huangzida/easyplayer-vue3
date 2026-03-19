@@ -1,5 +1,7 @@
 # easyplayer-vue3
 
+[English](./README.md) | [中文](./README.zh-CN.md)
+
 基于 EasyPlayerPro 的 Vue 3 组件封装，提供类型化的 props、事件和实例方法。
 
 ## 特性
