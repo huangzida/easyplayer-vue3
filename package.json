@@ -1,6 +1,6 @@
 {
   "name": "easyplayer-vue3",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Vue 3 wrapper for EasyPlayerPro with typed API, docs, and playground.",
   "type": "module",
   "license": "MIT",
