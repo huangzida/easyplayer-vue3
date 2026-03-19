@@ -4,7 +4,19 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const root = resolve(__dirname, '..');
-const sourceDir = '/root/git/screen-recording/apps/web-antd/public/js/easyplayer';
+
+const possibleSourceDirs = [
+  resolve(root, 'public', 'assets', 'easyplayer'),
+  resolve(root, 'src', 'runtime'),
+];
+
+let sourceDir = null;
+for (const dir of possibleSourceDirs) {
+  if (existsSync(dir) && readdirSync(dir).length > 0) {
+    sourceDir = dir;
+    break;
+  }
+}
 
 const targets = process.argv.slice(2);
 
@@ -12,25 +24,31 @@ if (targets.length === 0) {
   targets.push('public', 'playground/public', 'docs/public');
 }
 
+if (!sourceDir) {
+  console.warn('[easyplayer-vue3] No EasyPlayer runtime assets found.');
+  console.warn('[easyplayer-vue3] Please ensure assets are in public/assets/easyplayer/ or src/runtime/');
+  console.warn('[easyplayer-vue3] Skipping asset sync...');
+  process.exit(0);
+}
+
+console.log(`[easyplayer-vue3] Found assets in: ${sourceDir}`);
+
 targets.forEach((target) => {
   const destDir = resolve(root, target, 'assets', 'easyplayer');
-
-  if (!existsSync(sourceDir)) {
-    console.error(`Source directory not found: ${sourceDir}`);
-    process.exit(1);
-  }
 
   mkdirSync(destDir, { recursive: true });
 
   const files = readdirSync(sourceDir);
   files.forEach((file) => {
-    const srcFile = resolve(sourceDir, file);
-    const destFile = resolve(destDir, file);
-    copyFileSync(srcFile, destFile);
-    console.log(`Copied: ${file} -> ${destFile}`);
+    if (file.endsWith('.js') || file.endsWith('.wasm')) {
+      const srcFile = resolve(sourceDir, file);
+      const destFile = resolve(destDir, file);
+      copyFileSync(srcFile, destFile);
+      console.log(`[easyplayer-vue3] Copied: ${file} -> ${destDir}`);
+    }
   });
 
-  console.log(`Assets synced to: ${destDir}\n`);
+  console.log(`[easyplayer-vue3] Assets synced to: ${destDir}\n`);
 });
 
-console.log('Done!');
+console.log('[easyplayer-vue3] Done!');
