@@ -12,6 +12,35 @@ export const defaultAssetUrls: EasyPlayerAssetUrls = {
   wasm: 'EasyPlayer-pro.wasm',
 };
 
+const getBasePath = (): string => {
+  if (typeof window === 'undefined') {
+    return '/assets/easyplayer/';
+  }
+
+  const scripts = document.querySelectorAll('script[src]');
+  let basePath = '/assets/easyplayer/';
+
+  scripts.forEach((script) => {
+    const src = script.getAttribute('src') || '';
+    const match = src.match(/^(.+\/)index\.js$/);
+    if (match && match[1]) {
+      basePath = `${match[1]}assets/easyplayer/`;
+    }
+  });
+
+  if (basePath === '/assets/easyplayer/') {
+    const base = document.querySelector('base');
+    if (base) {
+      const href = base.getAttribute('href');
+      if (href) {
+        basePath = `${href.replace(/\/$/, '')}/assets/easyplayer/`;
+      }
+    }
+  }
+
+  return basePath;
+};
+
 export const ensureEasyPlayerRuntime = async (
   assetBaseUrl?: string,
 ): Promise<EasyPlayerAssetUrls> => {
@@ -19,7 +48,10 @@ export const ensureEasyPlayerRuntime = async (
     return defaultAssetUrls;
   }
 
-  const baseUrl = assetBaseUrl ? `${assetBaseUrl.replace(/\/$/, '')}/` : '/assets/easyplayer/';
+  const baseUrl = assetBaseUrl
+    ? `${assetBaseUrl.replace(/\/$/, '')}/`
+    : getBasePath();
+
   const assetUrls: EasyPlayerAssetUrls = {
     lib: `${baseUrl}${defaultAssetUrls.lib}`,
     pro: `${baseUrl}${defaultAssetUrls.pro}`,

@@ -1,5 +1,7 @@
 # easyplayer-vue3
 
+[English](./README.md) | [中文](./README.zh-CN.md)
+
 A Vue 3 component wrapper for EasyPlayerPro with typed props, events, and instance methods.
 
 ## Features
