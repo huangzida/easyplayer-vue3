@@ -17,28 +17,27 @@ const getBasePath = (): string => {
     return '/assets/easyplayer/';
   }
 
-  const scripts = document.querySelectorAll('script[src]');
-  let basePath = '/assets/easyplayer/';
-
-  scripts.forEach((script) => {
-    const src = script.getAttribute('src') || '';
-    const match = src.match(/^(.+\/)index\.js$/);
-    if (match && match[1]) {
-      basePath = `${match[1]}assets/easyplayer/`;
-    }
-  });
-
-  if (basePath === '/assets/easyplayer/') {
-    const base = document.querySelector('base');
-    if (base) {
-      const href = base.getAttribute('href');
-      if (href) {
-        basePath = `${href.replace(/\/$/, '')}/assets/easyplayer/`;
-      }
+  const base = document.querySelector('base');
+  if (base) {
+    const href = base.getAttribute('href');
+    if (href) {
+      return `${href.replace(/\/$/, '')}/assets/easyplayer/`;
     }
   }
 
-  return basePath;
+  const pathname = window.location.pathname;
+  const pathParts = pathname.split('/').filter(Boolean);
+
+  if (pathParts.length > 0) {
+    const lastPart = pathParts[pathParts.length - 1];
+    if (lastPart && !lastPart.includes('.')) {
+      return `/${lastPart}/assets/easyplayer/`;
+    }
+    const repoName = pathParts[0];
+    return `/${repoName}/assets/easyplayer/`;
+  }
+
+  return '/assets/easyplayer/';
 };
 
 export const ensureEasyPlayerRuntime = async (
@@ -58,6 +57,8 @@ export const ensureEasyPlayerRuntime = async (
     wasm: `${baseUrl}${defaultAssetUrls.wasm}`,
   };
 
+  console.log(`[EasyPlayer Vue3] Loading from: ${assetUrls.lib}`);
+
   const loadScript = (src: string): Promise<void> => {
     return new Promise((resolve, reject) => {
       if (document.querySelector(`script[src="${src}"]`)) {
@@ -68,7 +69,10 @@ export const ensureEasyPlayerRuntime = async (
       const script = document.createElement('script');
       script.src = src;
       script.onload = () => resolve();
-      script.onerror = reject;
+      script.onerror = (e) => {
+        console.error(`[EasyPlayer Vue3] Failed to load script: ${src}`);
+        reject(e);
+      };
       document.head.appendChild(script);
     });
   };

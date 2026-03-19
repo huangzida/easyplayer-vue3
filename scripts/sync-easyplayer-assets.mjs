@@ -21,7 +21,7 @@ for (const dir of possibleSourceDirs) {
 const targets = process.argv.slice(2);
 
 if (targets.length === 0) {
-  targets.push('public', 'playground/public', 'docs/public');
+  targets.push('docs/.vitepress/dist');
 }
 
 if (!sourceDir) {
