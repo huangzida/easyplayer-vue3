@@ -1,0 +1,47 @@
+{
+  "$schema": "https://release-it.org/schema.json",
+  "git": {
+    "commitMessage": "release: v${version}",
+    "tagName": "v${version}",
+    "tagAnnotation": "Release v${version}",
+    "push": true,
+    "pushArgs": {
+      "--force": false
+    }
+  },
+  "npm": {
+    "publish": false
+  },
+  "github": {
+    "release": true,
+    "releaseName": "v${version}",
+    "generateReleaseNotes": true
+  },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": {
+        "name": "conventionalcommits",
+        "types": [
+          {"type": "feat", "section": "Features", "hidden": false},
+          {"type": "fix", "section": "Bug Fixes", "hidden": false},
+          {"type": "perf", "section": "Performance Improvements", "hidden": false},
+          {"type": "refactor", "section": "Code Refactoring", "hidden": true},
+          {"type": "docs", "section": "Documentation", "hidden": true},
+          {"type": "test", "section": "Tests", "hidden": true},
+          {"type": "build", "section": "Build System", "hidden": true},
+          {"type": "ci", "section": "Continuous Integration", "hidden": true},
+          {"type": "chore", "section": "Maintenance", "hidden": true}
+        ]
+      },
+      "infile": "CHANGELOG.md",
+      "header": "# Changelog\n\nAll notable changes to this project will be documented in this file.\n\nThe format is based on [Conventional Commits](https://www.conventionalcommits.org/).\n",
+      "ignoreCommitPatterns": ["^WIP:", "^dump:"]
+    }
+  },
+  "hooks": {
+    "before:init": ["pnpm verify"],
+    "after:bump": ["pnpm build"],
+    "after:release": ["echo Published ${version} successfully!"]
+  },
+  "version": "0.0.0"
+}

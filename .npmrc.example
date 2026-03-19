@@ -1,0 +1,4 @@
+# npm 发布配置
+# 使用你自己的 npm token 替换下面的占位符
+# 获取 npm token: https://www.npmjs.com/settings/tokens
+//registry.npmjs.org/:_authToken=${NPM_TOKEN}
