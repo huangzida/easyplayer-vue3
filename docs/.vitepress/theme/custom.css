@@ -1,0 +1,23 @@
+:root {
+  --vp-c-brand-1: #f59e0b;
+  --vp-c-brand-2: #fbbf24;
+  --vp-c-brand-3: #fcd34d;
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(135deg, #fbbf24 0%, #38bdf8 55%, #22c55e 100%);
+  --vp-home-hero-image-background-image: radial-gradient(circle at 20% 20%, rgba(245, 158, 11, 0.4), transparent 32%), radial-gradient(circle at 80% 0%, rgba(56, 189, 248, 0.35), transparent 26%), radial-gradient(circle at 50% 80%, rgba(34, 197, 94, 0.22), transparent 28%);
+  --vp-home-hero-image-filter: blur(66px);
+}
+
+.VPDoc {
+  backdrop-filter: blur(16px);
+}
+
+.vp-doc h1,
+.vp-doc h2,
+.vp-doc h3 {
+  letter-spacing: -0.03em;
+}
+
+.vp-doc .custom-block {
+  border-radius: 18px;
+}

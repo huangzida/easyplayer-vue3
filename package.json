@@ -1,0 +1,98 @@
+{
+  "name": "easyplayer-vue3",
+  "version": "0.0.0",
+  "description": "Vue 3 wrapper for EasyPlayerPro with typed API, docs, and playground.",
+  "type": "module",
+  "license": "MIT",
+  "homepage": "https://huangzida.github.io/easyplayer-vue3/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/huangzida/easyplayer-vue3.git"
+  },
+  "bugs": {
+    "url": "https://github.com/huangzida/easyplayer-vue3/issues"
+  },
+  "keywords": [
+    "vue",
+    "vue3",
+    "easyplayer",
+    "video-player",
+    "hls",
+    "flv",
+    "m3u8",
+    "streaming"
+  ],
+  "packageManager": "pnpm@10.12.4",
+  "engines": {
+    "node": ">=20.10.0",
+    "pnpm": ">=9.12.0"
+  },
+  "files": [
+    "dist",
+    "dist/assets",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style.css": "./dist/index.css",
+    "./package.json": "./package.json"
+  },
+  "sideEffects": [
+    "*.css"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "dev": "vite --config playground/vite.config.ts",
+    "build": "vite build && vite build --config playground/vite.config.ts",
+    "build:docs": "node scripts/sync-easyplayer-assets.mjs docs && vitepress build docs",
+    "dev:docs": "node scripts/sync-easyplayer-assets.mjs docs && vitepress dev docs",
+    "lint": "eslint .",
+    "pack:check": "pnpm build && pnpm pack --pack-destination .artifacts",
+    "preview:docs": "vitepress preview docs",
+    "publint": "publint",
+    "release:check": "node scripts/validate-tag-version.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "vue-tsc --noEmit",
+    "verify": "pnpm lint && pnpm typecheck && pnpm build && pnpm build:docs && pnpm publint",
+    "copy-assets": "node scripts/sync-easyplayer-assets.mjs"
+  },
+  "peerDependencies": {
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.30.1",
+    "@types/node": "^24.9.1",
+    "@typescript-eslint/eslint-plugin": "^8.35.1",
+    "@typescript-eslint/parser": "^8.35.1",
+    "@vitejs/plugin-vue": "^6.0.1",
+    "@vue/test-utils": "^2.4.6",
+    "autoprefixer": "^10.4.21",
+    "es-toolkit": "^1.7.3",
+    "eslint": "^9.30.1",
+    "eslint-plugin-vue": "^10.2.0",
+    "happy-dom": "^17.6.3",
+    "postcss": "^8.5.6",
+    "publint": "^0.3.12",
+    "sass": "^1.89.2",
+    "tailwindcss": "^3.4.18",
+    "typescript": "^5.9.3",
+    "vite": "^6.4.1",
+    "vite-plugin-dts": "^4.5.4",
+    "vitepress": "^1.6.3",
+    "vitest": "^3.2.4",
+    "vue": "^3.5.17",
+    "vue-eslint-parser": "^10.2.0",
+    "vue-tsc": "^2.2.10"
+  }
+}

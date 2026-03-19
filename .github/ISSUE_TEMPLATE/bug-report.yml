@@ -1,0 +1,16 @@
+name: Bug report
+description: Report a reproducible issue with easyplayer-vue3
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Share a minimal reproduction or configuration.
