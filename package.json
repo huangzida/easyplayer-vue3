@@ -53,10 +53,10 @@
     "access": "public"
   },
   "scripts": {
-    "dev": "vite --config playground/vite.config.ts",
+    "dev": "node scripts/sync-playground.mjs && vite --config playground/vite.config.ts",
     "build": "vite build && vite build --config playground/vite.config.ts",
     "build:docs": "vitepress build docs && node scripts/sync-easyplayer-assets.mjs docs/.vitepress/dist",
-    "dev:docs": "vitepress dev docs",
+    "dev:docs": "node scripts/sync-playground.mjs && vitepress dev docs",
     "lint": "eslint .",
     "pack:check": "pnpm build && pnpm pack --pack-destination .artifacts",
     "preview:docs": "vitepress preview docs",

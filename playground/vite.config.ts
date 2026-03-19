@@ -20,6 +20,11 @@ export default defineConfig({
   build: {
     outDir: fileURLToPath(new URL('./dist', import.meta.url)),
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        assetFileNames: 'assets/[name]-[hash][extname]',
+      },
+    },
   },
   server: {
     host: '0.0.0.0',

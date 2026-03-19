@@ -38,21 +38,28 @@ if (!sourceDir) {
 console.log(`[easyplayer-vue3] Found assets in: ${sourceDir}`);
 
 targets.forEach((target) => {
-  const destDir = resolve(root, target, 'assets', 'easyplayer');
+  const baseDir = resolve(root, target);
+  const easyplayerDir = resolve(baseDir, 'assets', 'easyplayer');
 
-  mkdirSync(destDir, { recursive: true });
+  mkdirSync(easyplayerDir, { recursive: true });
 
   const files = readdirSync(sourceDir);
   files.forEach((file) => {
     if (file.endsWith('.js') || file.endsWith('.wasm')) {
       const srcFile = resolve(sourceDir, file);
-      const destFile = resolve(destDir, file);
+      const destFile = resolve(easyplayerDir, file);
       copyFileSync(srcFile, destFile);
-      console.log(`[easyplayer-vue3] Copied: ${file} -> ${destDir}`);
+      console.log(`[easyplayer-vue3] Copied: ${file} -> ${easyplayerDir}`);
+
+      if (file.endsWith('.wasm')) {
+        const rootDestFile = resolve(baseDir, file);
+        copyFileSync(srcFile, rootDestFile);
+        console.log(`[easyplayer-vue3] Copied: ${file} -> ${baseDir}`);
+      }
     }
   });
 
-  console.log(`[easyplayer-vue3] Assets synced to: ${destDir}\n`);
+  console.log(`[easyplayer-vue3] Assets synced to: ${easyplayerDir}\n`);
 });
 
 console.log('[easyplayer-vue3] Done!');
