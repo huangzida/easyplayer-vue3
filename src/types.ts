@@ -1,5 +1,74 @@
 import type { CSSProperties } from 'vue';
 
+export type PlayerMode = 'vod' | 'live' | 'custom';
+
+export interface WatermarkTextConfig {
+  content: string;
+  color?: string;
+  opacity?: number;
+  fontSize?: string;
+}
+
+export interface WatermarkConfig {
+  text: WatermarkTextConfig;
+  right?: number;
+  top?: number;
+}
+
+export interface FullWatermarkConfig {
+  text: string;
+  angle?: number;
+  color?: string;
+  fontSize?: string;
+  opacity?: number;
+}
+
+export interface RetryConfig {
+  maxRetries?: number;
+  retryDelay?: number;
+  exponentialBackoff?: boolean;
+}
+
+export interface EasyPlayerConfig {
+  mse?: boolean;
+  wcs?: boolean;
+  wasm?: boolean;
+  wasmSimd?: boolean;
+  gpuDecoder?: boolean;
+  webGpu?: boolean;
+  canvasRender?: boolean;
+  isLive?: boolean;
+  hasAudio?: boolean;
+  isMute?: boolean;
+  stretch?: boolean;
+  poster?: string;
+  bufferTime?: number;
+  loadTimeOut?: number;
+  loadTimeReplay?: number;
+  debug?: boolean;
+  quality?: string[];
+  defaultQuality?: string;
+  watermark?: WatermarkConfig;
+  fullWatermark?: FullWatermarkConfig;
+  retry?: RetryConfig;
+}
+
+export interface EasyPlayerProps extends EasyPlayerConfig {
+  url?: string;
+  mode?: PlayerMode;
+  noSignalText?: string;
+  fallbackUrl?: string;
+  class?: string;
+  style?: CSSProperties;
+  assetBaseUrl?: string;
+}
+
+export interface EventHistory {
+  timestamp: number;
+  event: string;
+  data?: any;
+}
+
 export interface EasyPlayerAssetUrls {
   lib: string;
   pro: string;
@@ -61,13 +130,6 @@ export interface EasyPlayerPro {
   off?: (event: string, callback?: (e?: any) => void) => void;
 }
 
-export interface EasyPlayerProps extends EasyPlayerProConfig {
-  url: string;
-  noSignalText?: string;
-  style?: CSSProperties;
-  class?: string;
-}
-
 export interface EasyPlayerEmits {
   playerReady: [player: EasyPlayerPro];
   play: [];
@@ -95,5 +157,10 @@ export interface EasyPlayerInstance {
   setFullscreen: () => void;
   exitFullscreen: () => void;
   setMute: (mute: boolean) => void;
+  setQuality: (quality: string) => void;
+  seekTime: (time: number) => void;
   destroy: () => void;
+  retry: () => void;
+  getEventHistory: () => EventHistory[];
+  clearEventHistory: () => void;
 }

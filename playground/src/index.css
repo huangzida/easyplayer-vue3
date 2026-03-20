@@ -4,7 +4,7 @@
 
 :root {
   color-scheme: dark;
-  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  font-family: 'Trebuchet MS', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
   background: #060816;
 }
 
@@ -12,12 +12,60 @@ body {
   margin: 0;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 10% 10%, rgba(245, 158, 11, 0.18), transparent 25%),
-    radial-gradient(circle at 90% 0%, rgba(56, 189, 248, 0.12), transparent 30%),
-    linear-gradient(180deg, #020617 0%, #0f172a 48%, #111827 100%);
+    radial-gradient(ellipse at 10% 20%, rgba(245, 158, 11, 0.15), transparent 40%),
+    radial-gradient(ellipse at 90% 10%, rgba(56, 189, 248, 0.12), transparent 35%),
+    radial-gradient(ellipse at 50% 80%, rgba(168, 85, 247, 0.08), transparent 40%),
+    linear-gradient(180deg, #020617 0%, #0f172a 45%, #111827 100%);
+  background-attachment: fixed;
   color: #e5edf8;
 }
 
 * {
   box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+::selection {
+  background: rgba(251, 191, 36, 0.3);
+  color: #fbbf24;
+}
+
+@layer base {
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+
+  input, textarea, select {
+    @apply font-sans;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-hover:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+  }
 }

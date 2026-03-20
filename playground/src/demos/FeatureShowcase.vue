@@ -1,143 +1,404 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
-
+import { ref } from 'vue';
+import type { PlayerMode } from '@/types';
 import { EasyPlayer } from '@/index';
-import type { EasyPlayerInstance } from '@/types';
+import type { EventHistory } from '@/types';
 
+import PlayerConfig from '../components/PlayerConfig.vue';
+import EventLog from '../components/EventLog.vue';
 import StatusBadge from '../components/StatusBadge.vue';
 
 const liveSource = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
-const vodSource = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
+// const vodSource = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
+// const vodSource = 'http://localhost:3000/xgplayer-demo.mp4';
+const vodSource = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 const flvHint = 'ws://localhost:8080/live.flv';
 
-const source = ref(vodSource);
-const isLive = ref(false);
+const url = ref(vodSource);
+const mode = ref<PlayerMode>('vod');
+const poster = ref('');
+const mse = ref(false);
+const wcs = ref(false);
+const wasm = ref(false);
+const wasmSimd = ref(true);
+const gpuDecoder = ref(false);
+const webGpu = ref(false);
+const canvasRender = ref(false);
 const stretch = ref(false);
-const isMute = ref(true);
+const isLive = ref(false);
+const isMute = ref(false);
 const hasAudio = ref(true);
-const logs = ref<string[]>([]);
-const playerRef = ref<EasyPlayerInstance | null>(null);
+const bufferTime = ref(1);
+const loadTimeOut = ref(10);
+const loadTimeReplay = ref(3);
+const debug = ref(false);
+const quality = ref<string[]>([]);
+const defaultQuality = ref('');
+const watermark = ref<any>(undefined);
+const fallbackUrl = ref('');
 
-const sourceLabel = computed(() => (isLive.value ? 'Live HLS source' : 'MP4 replay source'));
-
-const pushLog = (message: string) => {
-  logs.value = [message, ...logs.value].slice(0, 10);
-};
+const playerRef = ref<any>(null);
+const eventHistory = ref<EventHistory[]>([]);
 
 const usePreset = (preset: 'vod' | 'live' | 'flv') => {
   if (preset === 'live') {
-    source.value = liveSource;
-    isLive.value = true;
-    pushLog('Switched to the HLS live preset.');
+    url.value = liveSource;
+    mode.value = 'live';
     return;
   }
 
   if (preset === 'flv') {
-    source.value = flvHint;
-    isLive.value = true;
-    pushLog('Switched to the WS-FLV placeholder preset.');
+    url.value = flvHint;
+    mode.value = 'live';
     return;
   }
 
-  source.value = vodSource;
-  isLive.value = false;
-  pushLog('Switched to the MP4 replay preset.');
+  url.value = vodSource;
+  mode.value = 'vod';
 };
 
 const callApi = (action: string) => {
-  if (!playerRef.value) {
-    pushLog(`Skipped ${action}: player is not ready yet.`);
+  const player = playerRef.value;
+  if (!player) {
+    console.warn('Player not ready');
     return;
   }
 
   switch (action) {
     case 'play':
-      playerRef.value?.play(source.value);
+      player.play(url.value);
       break;
     case 'pause':
-      playerRef.value?.pause();
+      player.pause();
       break;
     case 'snapshot': {
-      const result = playerRef.value?.screenshot();
-      pushLog(`Snapshot taken: ${typeof result}`);
+      const result = player.screenshot();
+      console.log('Snapshot taken:', typeof result);
       break;
     }
     case 'fullscreen':
-      playerRef.value?.setFullscreen();
+      player.setFullscreen();
+      break;
+    case 'destroy':
+      player.destroy();
       break;
   }
+};
 
-  pushLog(`Called ${action}() from the public instance.`);
+const handlePlayerReady = (player: any) => {
+  console.log('Player ready', player);
+  if (playerRef.value) {
+    const history = playerRef.value.getEventHistory();
+    eventHistory.value = [...history];
+  }
+};
+
+const handlePlay = () => {
+  console.log('Player started playing');
+  if (playerRef.value) {
+    const history = playerRef.value.getEventHistory();
+    eventHistory.value = [...history];
+  }
+};
+
+const handleError = (error: any) => {
+  console.error('Player error:', error);
+  if (playerRef.value) {
+    const history = playerRef.value.getEventHistory();
+    eventHistory.value = [...history];
+  }
+};
+
+const handleTimeout = () => {
+  console.warn('Player timeout');
+  if (playerRef.value) {
+    const history = playerRef.value.getEventHistory();
+    eventHistory.value = [...history];
+  }
+};
+
+const handleLiveEnd = () => {
+  console.log('Live stream ended');
+  if (playerRef.value) {
+    const history = playerRef.value.getEventHistory();
+    eventHistory.value = [...history];
+  }
+};
+
+const handleVideoInfo = (info: any) => {
+  console.log('Video info:', info);
+  if (playerRef.value) {
+    const history = playerRef.value.getEventHistory();
+    eventHistory.value = [...history];
+  }
+};
+
+const handleAudioInfo = (info: any) => {
+  console.log('Audio info:', info);
+  if (playerRef.value) {
+    const history = playerRef.value.getEventHistory();
+    eventHistory.value = [...history];
+  }
+};
+
+const handleKBps = (speed: number) => {
+  if (playerRef.value) {
+    const history = playerRef.value.getEventHistory();
+    eventHistory.value = [...history];
+  }
+};
+
+const handleTimestamps = (time: number) => {
+  if (playerRef.value) {
+    const history = playerRef.value.getEventHistory();
+    eventHistory.value = [...history];
+  }
+};
+
+const clearHistory = () => {
+  if (playerRef.value) {
+    playerRef.value.clearEventHistory();
+  }
+  eventHistory.value = [];
 };
 </script>
 
 <template>
-  <section class="grid gap-6 lg:grid-cols-[1.2fr_0.8fr]">
-    <article class="overflow-hidden rounded-[32px] border border-white/10 bg-slate-950/50 p-4 shadow-[0_30px_80px_rgba(15,23,42,0.45)] backdrop-blur-2xl md:p-6">
-      <div class="mb-4 flex flex-wrap items-center gap-3">
-        <StatusBadge :label="isLive ? 'live' : 'vod'" tone="sky" />
-        <StatusBadge :label="stretch ? 'stretch' : 'contain'" tone="amber" />
-        <StatusBadge :label="isMute ? 'mute' : 'sound'" tone="emerald" />
+  <section class="feature-showcase">
+    <div class="player-preview">
+      <div class="player-header">
+        <div class="player-status">
+          <StatusBadge :label="mode" tone="sky" />
+          <StatusBadge :label="stretch ? 'stretch' : 'contain'" tone="emerald" />
+          <StatusBadge :label="isMute ? 'mute' : 'sound'" tone="rose" />
+        </div>
+        <div class="preset-buttons">
+          <button class="preset-btn amber" @click="usePreset('vod')">MP4</button>
+          <button class="preset-btn sky" @click="usePreset('live')">HLS</button>
+          <button class="preset-btn rose" @click="usePreset('flv')">WS-FLV</button>
+        </div>
       </div>
       <EasyPlayer
         ref="playerRef"
-        :url="source"
-        :is-live="isLive"
+        :url="url"
+        :mode="mode"
+        :poster="poster"
+        :mse="mse"
+        :wcs="wcs"
+        :wasm="wasm"
+        :wasm-simd="wasmSimd"
+        :gpu-decoder="gpuDecoder"
+        :web-gpu="webGpu"
+        :canvas-render="canvasRender"
         :stretch="stretch"
+        :is-live="isLive"
         :is-mute="isMute"
         :has-audio="hasAudio"
-        @play="pushLog('Player started playing.')"
-        @pause="pushLog('Player paused.')"
-        @error="pushLog(`Player error: ${$event}`)"
-        @timeout="pushLog('Player timeout.')"
-        @live-end="pushLog('Live stream ended.')"
+        :buffer-time="bufferTime"
+        :load-time-out="loadTimeOut"
+        :load-time-replay="loadTimeReplay"
+        :debug="debug"
+        :quality="quality.length ? quality : undefined"
+        :default-quality="defaultQuality || undefined"
+        :watermark="watermark"
+        :fallback-url="fallbackUrl || undefined"
+        @player-ready="handlePlayerReady"
+        @play="handlePlay"
+        @error="handleError"
+        @timeout="handleTimeout"
+        @live-end="handleLiveEnd"
+        @video-info="handleVideoInfo"
+        @audio-info="handleAudioInfo"
+        @k-bps="handleKBps"
+        @timestamps="handleTimestamps"
       />
-    </article>
+    </div>
 
-    <aside class="grid gap-4">
-      <div class="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
-        <h2 class="text-xl font-semibold text-white">Interactive controls</h2>
-        <p class="mt-2 text-sm leading-7 text-slate-300">
-          The playground uses the same public API that the npm package exports. Swap between replay and live presets, then call the exposed player methods.
-        </p>
-        <div class="mt-5 grid gap-3">
-          <label class="text-xs uppercase tracking-[0.26em] text-slate-400">{{ sourceLabel }}</label>
-          <input v-model="source" class="rounded-2xl border border-white/10 bg-slate-950/60 px-4 py-3 text-sm text-white outline-none ring-0" />
-          <div class="grid grid-cols-3 gap-3">
-            <button class="rounded-2xl bg-amber-300/90 px-4 py-3 text-sm font-semibold text-slate-950" @click="usePreset('vod')">MP4</button>
-            <button class="rounded-2xl bg-sky-300/90 px-4 py-3 text-sm font-semibold text-slate-950" @click="usePreset('live')">HLS</button>
-            <button class="rounded-2xl bg-rose-300/90 px-4 py-3 text-sm font-semibold text-slate-950" @click="usePreset('flv')">WS-FLV</button>
+    <div class="controls-section">
+      <div class="controls-main">
+        <PlayerConfig
+          v-model:url="url"
+          v-model:mode="mode"
+          v-model:poster="poster"
+          v-model:mse="mse"
+          v-model:wcs="wcs"
+          v-model:wasm="wasm"
+          v-model:wasm-simd="wasmSimd"
+          v-model:gpu-decoder="gpuDecoder"
+          v-model:web-gpu="webGpu"
+          v-model:canvas-render="canvasRender"
+          v-model:stretch="stretch"
+          v-model:is-live="isLive"
+          v-model:is-mute="isMute"
+          v-model:has-audio="hasAudio"
+          v-model:buffer-time="bufferTime"
+          v-model:load-time-out="loadTimeOut"
+          v-model:load-time-replay="loadTimeReplay"
+          v-model:debug="debug"
+          v-model:quality="quality"
+          v-model:default-quality="defaultQuality"
+          v-model:watermark="watermark"
+          v-model:fallback-url="fallbackUrl"
+        />
+      </div>
+
+      <div class="controls-sidebar">
+        <div class="instance-methods">
+          <h3 class="section-title">Instance Methods</h3>
+          <div class="method-grid">
+            <button class="method-btn" @click="callApi('play')">play()</button>
+            <button class="method-btn" @click="callApi('pause')">pause()</button>
+            <button class="method-btn" @click="callApi('snapshot')">screenshot()</button>
+            <button class="method-btn" @click="callApi('fullscreen')">setFullscreen()</button>
+            <button class="method-btn" @click="callApi('destroy')">destroy()</button>
           </div>
-          <div class="grid grid-cols-2 gap-3">
-            <button class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white" @click="isLive = !isLive">Toggle mode</button>
-            <button class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white" @click="stretch = !stretch">Toggle stretch</button>
-            <button class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white" @click="isMute = !isMute">Toggle mute</button>
-            <button class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white" @click="hasAudio = !hasAudio">Toggle audio</button>
-          </div>
         </div>
-      </div>
 
-      <div class="rounded-[28px] border border-white/10 bg-white/5 p-5 backdrop-blur-xl">
-        <h2 class="text-xl font-semibold text-white">Public instance</h2>
-        <div class="mt-4 grid grid-cols-2 gap-3">
-          <button class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white" @click="callApi('play')">play()</button>
-          <button class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white" @click="callApi('pause')">pause()</button>
-          <button class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white" @click="callApi('snapshot')">screenshot()</button>
-          <button class="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-white" @click="callApi('fullscreen')">setFullscreen()</button>
-        </div>
+        <EventLog
+          :events="eventHistory"
+          :max-logs="50"
+          @clear="clearHistory"
+        />
       </div>
-
-      <div class="rounded-[28px] border border-white/10 bg-slate-950/65 p-5 backdrop-blur-xl">
-        <div class="flex items-center justify-between">
-          <h2 class="text-xl font-semibold text-white">Event log</h2>
-          <StatusBadge label="latest 10" tone="rose" />
-        </div>
-        <ul class="mt-4 grid gap-2 text-sm text-slate-300">
-          <li v-for="(log, index) in logs" :key="`${log}-${index}`" class="rounded-2xl border border-white/8 bg-white/5 px-3 py-2">
-            {{ log }}
-          </li>
-        </ul>
-      </div>
-    </aside>
+    </div>
   </section>
 </template>
+
+<style scoped>
+.feature-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.player-preview {
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  overflow: hidden;
+  backdrop-filter: blur(20px);
+}
+
+.player-header {
+  padding: 20px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.player-status {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.preset-buttons {
+  display: flex;
+  gap: 8px;
+}
+
+.preset-btn {
+  padding: 8px 20px;
+  border: none;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  color: #0f172a;
+}
+
+.preset-btn.amber {
+  background: rgba(251, 191, 36, 0.9);
+}
+
+.preset-btn.amber:hover {
+  background: rgba(251, 191, 36, 1);
+}
+
+.preset-btn.sky {
+  background: rgba(56, 189, 248, 0.9);
+}
+
+.preset-btn.sky:hover {
+  background: rgba(56, 189, 248, 1);
+}
+
+.preset-btn.rose {
+  background: rgba(251, 113, 133, 0.9);
+}
+
+.preset-btn.rose:hover {
+  background: rgba(251, 113, 133, 1);
+}
+
+.controls-section {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+}
+
+@media (max-width: 1200px) {
+  .controls-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+.controls-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.controls-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.instance-methods {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #f1f5f9;
+  margin: 0 0 16px 0;
+}
+
+.method-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+.method-btn {
+  padding: 12px 16px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  color: #e2e8f0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: center;
+}
+
+.method-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #f1f5f9;
+}
+
+.method-btn:active {
+  transform: scale(0.98);
+}
+</style>

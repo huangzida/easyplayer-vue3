@@ -2,16 +2,18 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md)
 
-A Vue 3 component wrapper for EasyPlayerPro with typed props, events, and instance methods.
+Vue 3 component wrapper for EasyPlayerPro with typed props, events, and instance methods.
 
 ## Features
 
-- **Multi-format support**: HLS, FLV, MP4, WebM and more
-- **Rich controls**: Play, pause, screenshot, fullscreen, mute, and more
-- **Typed API**: Full TypeScript support with complete type definitions
-- **Event system**: Comprehensive events for player state changes
-- **Auto runtime loading**: Automatically loads EasyPlayer runtime assets
-- **Flexible deployment**: Supports custom asset base URLs for CDN hosting
+- **Multi-format support**: HLS, FLV, MP4, WebM, etc.
+- **Rich controls**: Play, pause, screenshot, fullscreen, mute, etc.
+- **Mode presets**: Built-in `vod` and `live` mode presets
+- **Smart naming**: CamelCase API matching modern Vue/TypeScript conventions
+- **Error retry**: Built-in exponential backoff retry strategy
+- **Event history**: Records all events during playback
+- **Full TypeScript support**: Complete type definitions
+- **Flexible deployment**: Custom CDN resource path support
 
 ## Installation
 
@@ -33,89 +35,147 @@ import { EasyPlayer } from 'easyplayer-vue3';
 </script>
 
 <template>
-  <EasyPlayer
-    url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-    :is-live="true"
-  />
+  <EasyPlayer url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" />
 </template>
 ```
 
-### With Event Handlers
+### Mode Presets
 
 ```vue
-<script setup lang="ts">
-const handlePlay = () => {
-  console.log('Player started');
-};
+<!-- VOD scenario - default to vod mode -->
+<EasyPlayer url="video.mp4" mode="vod" />
 
-const handleError = (error: any) => {
-  console.error('Player error:', error);
-};
-</script>
+<!-- Live scenario -->
+<EasyPlayer url="live.m3u8" mode="live" />
 
-<template>
-  <EasyPlayer
-    url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-    :is-live="true"
-    @play="handlePlay"
-    @error="handleError"
-  />
-</template>
+<!-- Custom parameters -->
+<EasyPlayer
+  url="live.m3u8"
+  mode="custom"
+  :mse="true"
+  :debug="true"
+/>
 ```
 
-### Using Instance Methods
+### Live with Watermark
 
 ```vue
-<script setup lang="ts">
-import { ref } from 'vue';
-import type { EasyPlayerInstance } from 'easyplayer-vue3';
+<EasyPlayer
+  url="live.m3u8"
+  mode="live"
+  :watermark="{
+    text: { content: 'Watermark' },
+    right: 10,
+    top: 10
+  }"
+/>
+```
 
-const playerRef = ref<EasyPlayerInstance | null>(null);
+### Quality Switching
 
-const takeSnapshot = () => {
-  if (playerRef.value) {
-    playerRef.value.screenshot('snapshot', 'png', 0.92, 'download');
-  }
-};
-</script>
+```vue
+<EasyPlayer
+  url="video.mp4"
+  mode="vod"
+  :quality="['SD', 'HD', 'FHD']"
+  default-quality="HD"
+/>
+```
 
-<template>
-  <div>
-    <EasyPlayer
-      ref="playerRef"
-      url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8"
-      :is-live="true"
-    />
-    <button @click="takeSnapshot">Take Snapshot</button>
-  </div>
-</template>
+### Error Retry Configuration
+
+```vue
+<EasyPlayer
+  url="video.mp4"
+  mode="vod"
+  :retry="{ maxRetries: 5, retryDelay: 1000 }"
+  :fallback-url="backupUrl"
+  @error="handleError"
+>
+  <template #error="{ error, retry }">
+    <div class="player-error">
+      <p>Playback failed: {{ error }}</p>
+      <button @click="retry">Retry</button>
+    </div>
+  </template>
+</EasyPlayer>
 ```
 
 ## API Reference
 
 ### Props
 
+#### Mode Presets
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mode` | `'vod' \| 'live' \| 'custom'` | `'vod'` | Playback mode preset |
+
+**Mode preset parameters**:
+
+- **vod**: `isLive: false, bufferTime: 1`
+- **live**: `isLive: true, bufferTime: 0.2`
+
+#### Basic Parameters
+
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
 | `url` | `string` | required | Video stream or file URL |
-| `isLive` | `boolean` | `true` | Live streaming mode |
-| `hasAudio` | `boolean` | `true` | Parse audio track |
-| `isMute` | `boolean` | `true` | Start muted |
-| `stretch` | `boolean` | `false` | Stretch video to fill container |
-| `poster` | `string` | - | Poster image URL |
-| `bufferTime` | `number` | `0.1` | Buffer duration in seconds |
-| `MSE` | `boolean` | `false` | MSE decoding mode |
-| `WCS` | `boolean` | `false` | WCS decoding mode |
-| `WASM` | `boolean` | `false` | WASM decoding mode |
-| `WASMSIMD` | `boolean` | `true` | WASM SIMD mode |
-| `gpuDecoder` | `boolean` | - | Hardware decoding |
-| `webGPU` | `boolean` | - | WebGPU rendering |
-| `canvasRender` | `boolean` | - | Canvas rendering |
-| `debug` | `boolean` | `false` | Debug mode |
+| `poster` | `string` | - | Cover image URL |
 | `noSignalText` | `string` | `''` | No signal text |
-| `class` | `string` | `''` | Custom class |
-| `style` | `CSSProperties` | `{}` | Custom styles |
-| `assetBaseUrl` | `string` | `''` | Runtime assets base URL |
+
+#### Decode Parameters (CamelCase)
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `mse` | `boolean` | `false` | MSE decode mode |
+| `wcs` | `boolean` | `false` | WCS decode mode |
+| `wasm` | `boolean` | `false` | WASM decode mode |
+| `wasmSimd` | `boolean` | `true` | WASM SIMD mode |
+| `gpuDecoder` | `boolean` | - | Hardware decode |
+
+#### Render Parameters
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `webGpu` | `boolean` | - | WebGPU render |
+| `canvasRender` | `boolean` | - | Canvas render |
+| `stretch` | `boolean` | `false` | Stretch to fill |
+
+#### Playback Parameters
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `isLive` | `boolean` | `false` | Live mode (overridden by mode preset) |
+| `isMute` | `boolean` | `false` | Initial mute state |
+| `hasAudio` | `boolean` | `true` | Parse audio track |
+| `bufferTime` | `number` | `1` | Buffer duration in seconds (overridden by mode preset) |
+
+#### Advanced Parameters
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `loadTimeOut` | `number` | - | Load timeout in seconds |
+| `loadTimeReplay` | `number` | - | Reconnect attempts |
+| `debug` | `boolean` | `false` | Debug mode |
+
+#### Feature Parameters
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `quality` | `string[]` | - | Quality levels |
+| `defaultQuality` | `string` | - | Default quality |
+| `watermark` | `WatermarkConfig` | - | Watermark config |
+| `fullWatermark` | `FullWatermarkConfig` | - | Fullscreen watermark |
+| `fallbackUrl` | `string` | - | Fallback URL |
+
+#### Retry Parameters
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `retry.maxRetries` | `number` | `3` | Max retry attempts |
+| `retry.retryDelay` | `number` | `1000` | Retry delay in ms |
+| `retry.exponentialBackoff` | `boolean` | `true` | Exponential backoff |
 
 ### Events
 
@@ -126,44 +186,71 @@ const takeSnapshot = () => {
 | `error` | `any` | Fired on player error |
 | `timeout` | - | Fired on load timeout |
 | `liveEnd` | - | Fired when live stream ends |
-| `videoInfo` | `any` | Video metadata info |
-| `audioInfo` | `any` | Audio metadata info |
+| `videoInfo` | `any` | Video information |
+| `audioInfo` | `any` | Audio information |
 | `playerReady` | `EasyPlayerPro` | Player instance ready |
+| `kBps` | `number` | Current network speed |
+| `timestamps` | `number` | Current playback timestamp |
 
 ### Instance Methods
 
 | Method | Parameters | Description |
 |--------|------------|-------------|
-| `getPlayer()` | - | Get the underlying player instance |
-| `play(url)` | `url: string` | Start playing a URL |
+| `getPlayer()` | - | Get underlying player instance |
+| `play(url)` | `url: string` | Start playing specified URL |
 | `playback(url)` | `url: string` | Start VOD playback |
 | `pause()` | - | Pause playback |
-| `screenshot()` | `filename?, format?, quality?, type?` | Take a screenshot |
+| `screenshot()` | `filename?, format?, quality?, type?` | Take screenshot |
 | `setFullscreen()` | - | Enter fullscreen |
 | `exitFullscreen()` | - | Exit fullscreen |
 | `setMute(mute)` | `mute: boolean` | Set mute state |
-| `destroy()` | - | Destroy the player |
+| `setQuality(quality)` | `quality: string` | Set quality level |
+| `seekTime(time)` | `time: number` | Seek to time |
+| `retry()` | - | Manual retry |
+| `getEventHistory()` | - | Get event history |
+| `clearEventHistory()` | - | Clear event history |
+| `destroy()` | - | Destroy player |
+
+### Slots
+
+| Name | Scoped | Description |
+|------|--------|-------------|
+| `error` | `{ error, retry }` | Error state slot |
+
+## Naming Convention
+
+EasyPlayer.js native parameters use PascalCase/ALL_CAPS, Vue component converts to camelCase:
+
+| EasyPlayer.js | Vue Props |
+|---------------|-----------|
+| MSE | `mse` |
+| WCS | `wcs` |
+| WASM | `wasm` |
+| WASMSIMD | `wasmSimd` |
+| webGPU | `webGpu` |
+| loadTimeOut | `loadTimeOut` |
+| loadTimeReplay | `loadTimeReplay` |
 
 ## Supported Formats
 
 - **HLS** (`.m3u8`) - HTTP Live Streaming
 - **FLV** (`.flv`) - Flash Video via WebSocket
-- **MP4** (`.mp4`) - Standard video files
-- **WebM** (`.webm`) - WebM video files
+- **MP4** (`.mp4`) - Standard video file
+- **WebM** (`.webm`) - WebM video file
 
-## Runtime Assets
+## Runtime Resources
 
-The component automatically loads EasyPlayer runtime assets:
+The component automatically loads EasyPlayer runtime resources:
 - `EasyPlayer-lib.js` - Base library
-- `EasyPlayer-pro.js` - Professional player
+- `EasyPlayer-pro.js` - Pro player
 - `EasyPlayer-pro.wasm` - WebAssembly module
 
-Assets are expected at `public/assets/easyplayer/` relative to your deployment. You can customize the base URL:
+Resource files should be placed in `public/assets/easyplayer/` of your deployment. You can customize the base path:
 
 ```vue
 <EasyPlayer
   url="https://example.com/stream.m3u8"
-  asset-base-url="https://cdn.example.com/easyplayer"
+  assetBaseUrl="https://cdn.example.com/easyplayer"
 />
 ```
 
@@ -173,20 +260,20 @@ Assets are expected at `public/assets/easyplayer/` relative to your deployment. 
 # Install dependencies
 pnpm install
 
-# Start playground
+# Start demo
 pnpm dev
 
 # Start docs
 pnpm dev:docs
 
-# Build library and playground
+# Build library and demo
 pnpm build
 
 # Build docs
 pnpm build:docs
 ```
 
-## Build & Verify
+## Build & Validate
 
 ```bash
 pnpm lint

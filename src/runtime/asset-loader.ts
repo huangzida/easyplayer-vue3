@@ -78,7 +78,7 @@ export const ensureEasyPlayerRuntime = async (
   };
 
   try {
-    await loadScript(assetUrls.lib);
+    // await loadScript(assetUrls.lib);
     await loadScript(assetUrls.pro);
     loaded = true;
   } catch (error) {

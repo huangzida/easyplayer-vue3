@@ -5,3 +5,4 @@ dist
 coverage
 playground/dist
 docs/.vitepress/dist
+.DS_Store
