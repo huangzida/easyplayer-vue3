@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/).
 
 
+## [0.2.0](https://github.com/huangzida/easyplayer-vue3/compare/v0.1.0...v0.2.0) (2026-03-20)
+
+### Features
+
+* 重构 EasyPlayer API 并增强功能 ([daf346e](https://github.com/huangzida/easyplayer-vue3/commit/daf346e33d8b6a116dd35a09373e3c00b5b67c81))
+
 ## 0.1.0 (2026-03-19)
 
 ### Features
