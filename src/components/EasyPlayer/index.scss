@@ -8,6 +8,14 @@
   color: #fff;
   background-color: #000;
 
+  &.hide-controls {
+    :deep(.easyplayer-loading .easyplayer-loading-img),
+    :deep(.easyplayer-controls),
+    :deep(.easyplayer-contextmenu-btn) {
+      display: none !important;
+    }
+  }
+
   :deep(.easyplayer-loading .easyplayer-loading-img),
   :deep(.easyplayer-contextmenu-btn) {
     display: none !important;

@@ -42,11 +42,11 @@ import { EasyPlayer } from 'easyplayer-vue3';
 ### Mode Presets
 
 ```vue
-<!-- VOD scenario - default to vod mode -->
-<EasyPlayer url="video.mp4" mode="vod" />
-
-<!-- Live scenario -->
+<!-- Live scenario - default to live mode -->
 <EasyPlayer url="live.m3u8" mode="live" />
+
+<!-- VOD scenario -->
+<EasyPlayer url="video.mp4" mode="vod" />
 
 <!-- Custom parameters -->
 <EasyPlayer
@@ -109,12 +109,12 @@ import { EasyPlayer } from 'easyplayer-vue3';
 
 | Prop | Type | Default | Description |
 |------|------|---------|-------------|
-| `mode` | `'vod' \| 'live' \| 'custom'` | `'vod'` | Playback mode preset |
+| `mode` | `'vod' \| 'live' \| 'custom'` | `'live'` | Playback mode preset |
 
 **Mode preset parameters**:
 
 - **vod**: `isLive: false, bufferTime: 1`
-- **live**: `isLive: true, bufferTime: 0.2`
+- **live**: `isLive: true, bufferTime: 0.2` (default)
 
 #### Basic Parameters
 
@@ -141,6 +141,7 @@ import { EasyPlayer } from 'easyplayer-vue3';
 | `webGpu` | `boolean` | - | WebGPU render |
 | `canvasRender` | `boolean` | - | Canvas render |
 | `stretch` | `boolean` | `false` | Stretch to fill |
+| `controlsVisible` | `boolean` | `false` | Show/hide control bar (true = show, false = hide) |
 
 #### Playback Parameters
 
@@ -242,6 +243,7 @@ EasyPlayer.js native parameters use PascalCase/ALL_CAPS, Vue component converts 
 
 The component automatically loads EasyPlayer runtime resources:
 - `EasyPlayer-lib.js` - Base library
+- `EasyPlayer-decode.js` - MSE Decode library
 - `EasyPlayer-pro.js` - Pro player
 - `EasyPlayer-pro.wasm` - WebAssembly module
 

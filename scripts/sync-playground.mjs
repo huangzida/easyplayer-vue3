@@ -6,7 +6,7 @@ const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const root = resolve(__dirname, '..');
 
 const sourceDir = resolve(root, 'public', 'assets', 'easyplayer');
-const playgroundPublicDir = resolve(root, 'playground', 'public');
+const playgroundPublicDir = resolve(root, 'playground', 'public', 'assets', 'easyplayer');
 
 if (!existsSync(sourceDir)) {
   console.warn('[easyplayer-vue3] Source assets not found:', sourceDir);

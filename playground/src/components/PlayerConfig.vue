@@ -25,6 +25,7 @@ interface ConfigProps {
   defaultQuality?: string;
   watermark?: any;
   fallbackUrl?: string;
+  controlsVisible: boolean;
 }
 
 const props = defineProps<ConfigProps>();
@@ -51,6 +52,7 @@ const emit = defineEmits<{
   (e: 'update:defaultQuality', value?: string): void;
   (e: 'update:watermark', value?: any): void;
   (e: 'update:fallbackUrl', value?: string): void;
+  (e: 'update:controlsVisible', value: boolean): void;
 }>();
 
 const activeTab = ref<'basic' | 'decode' | 'render' | 'playback' | 'advanced' | 'feature'>('basic');
@@ -63,6 +65,12 @@ const presets = [
 
 const usePreset = (mode: PlayerMode) => {
   emit('update:mode', mode);
+  
+  if (mode === 'vod') {
+    emit('update:controlsVisible', true);
+  } else if (mode === 'live') {
+    emit('update:controlsVisible', false);
+  }
 };
 </script>
 
@@ -190,6 +198,14 @@ const usePreset = (mode: PlayerMode) => {
               type="checkbox"
               :checked="props.stretch"
               @change="emit('update:stretch', ($event.target as HTMLInputElement).checked)"
+            />
+          </div>
+          <div class="config-item switch">
+            <label>Controls Visible</label>
+            <input
+              type="checkbox"
+              :checked="props.controlsVisible"
+              @change="emit('update:controlsVisible', ($event.target as HTMLInputElement).checked)"
             />
           </div>
         </div>

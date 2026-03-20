@@ -11,12 +11,14 @@ import StatusBadge from '../components/StatusBadge.vue';
 const liveSource = 'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8';
 // const vodSource = 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4';
 // const vodSource = 'http://localhost:3000/xgplayer-demo.mp4';
+// const vodSource = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 const vodSource = 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4';
 const flvHint = 'ws://localhost:8080/live.flv';
+const posterUrl = 'https://media.w3.org/2010/05/sintel/poster.png';
 
 const url = ref(vodSource);
 const mode = ref<PlayerMode>('vod');
-const poster = ref('');
+const poster = ref(posterUrl);
 const mse = ref(false);
 const wcs = ref(false);
 const wasm = ref(false);
@@ -36,6 +38,7 @@ const quality = ref<string[]>([]);
 const defaultQuality = ref('');
 const watermark = ref<any>(undefined);
 const fallbackUrl = ref('');
+const controlsVisible = ref(true);
 
 const playerRef = ref<any>(null);
 const eventHistory = ref<EventHistory[]>([]);
@@ -44,17 +47,20 @@ const usePreset = (preset: 'vod' | 'live' | 'flv') => {
   if (preset === 'live') {
     url.value = liveSource;
     mode.value = 'live';
+    controlsVisible.value = false;
     return;
   }
 
   if (preset === 'flv') {
     url.value = flvHint;
     mode.value = 'live';
+    controlsVisible.value = false;
     return;
   }
 
   url.value = vodSource;
   mode.value = 'vod';
+  controlsVisible.value = true;
 };
 
 const callApi = (action: string) => {
@@ -202,6 +208,7 @@ const clearHistory = () => {
         :default-quality="defaultQuality || undefined"
         :watermark="watermark"
         :fallback-url="fallbackUrl || undefined"
+        :controls-visible="controlsVisible"
         @player-ready="handlePlayerReady"
         @play="handlePlay"
         @error="handleError"
@@ -239,6 +246,7 @@ const clearHistory = () => {
           v-model:default-quality="defaultQuality"
           v-model:watermark="watermark"
           v-model:fallback-url="fallbackUrl"
+          v-model:controls-visible="controlsVisible"
         />
       </div>
 
