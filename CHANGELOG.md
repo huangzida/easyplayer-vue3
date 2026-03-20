@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/).
 
 
+## [0.3.0](https://github.com/huangzida/easyplayer-vue3/compare/v0.2.0...v0.3.0) (2026-03-20)
+
+### Features
+
+* **播放器:** 新增控制栏显隐配置并优化默认配置 ([c194d38](https://github.com/huangzida/easyplayer-vue3/commit/c194d38af3c938c0f3d24b39e9fd7267c72e7761))
+
 ## [0.2.0](https://github.com/huangzida/easyplayer-vue3/compare/v0.1.0...v0.2.0) (2026-03-20)
 
 ### Features
