@@ -113,8 +113,8 @@ import { EasyPlayer } from 'easyplayer-vue3';
 
 **Mode preset parameters**:
 
-- **vod**: `isLive: false, bufferTime: 1`
-- **live**: `isLive: true, bufferTime: 0.2` (default)
+- **vod**: `isLive: false, bufferTime: 1, controlsVisible: true`
+- **live**: `isLive: true, bufferTime: 0.2, controlsVisible: false` (default)
 
 #### Basic Parameters
 

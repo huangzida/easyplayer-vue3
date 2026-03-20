@@ -113,8 +113,8 @@ import { EasyPlayer } from 'easyplayer-vue3';
 
 **模式预设参数**:
 
-- **vod**: `isLive: false, bufferTime: 1`
-- **live**: `isLive: true, bufferTime: 0.2`（默认）
+- **vod**: `isLive: false, bufferTime: 1, controlsVisible: true`
+- **live**: `isLive: true, bufferTime: 0.2, controlsVisible: false`（默认）
 
 #### 基础参数
 
