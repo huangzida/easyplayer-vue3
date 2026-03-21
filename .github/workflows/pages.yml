@@ -41,6 +41,7 @@ jobs:
 
       - name: Build docs
         run: |
+          pnpm build
           pnpm typecheck
           pnpm build:docs
 

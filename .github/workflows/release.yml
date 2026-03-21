@@ -36,10 +36,10 @@ jobs:
 
       - name: Verify package
         run: |
+          pnpm build
           pnpm lint
           pnpm typecheck
           pnpm test
-          pnpm build
           pnpm publint
           pnpm pack:check
 
