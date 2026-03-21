@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/).
 
 
+## [0.4.1](https://github.com/huangzida/easyplayer-vue3/compare/v0.4.0...v0.4.1) (2026-03-21)
+
+### Bug Fixes
+
+* **asset-loader:** 修复GitHub Pages部署时资源路径错误 ([6edc39a](https://github.com/huangzida/easyplayer-vue3/commit/6edc39a7c7b175dcfe9f8786fa1f3885b26be8ed))
+
 ## [0.4.0](https://github.com/huangzida/easyplayer-vue3/compare/v0.3.0...v0.4.0) (2026-03-21)
 
 ### Features
