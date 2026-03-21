@@ -5,6 +5,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/).
 
 
+## [0.4.0](https://github.com/huangzida/easyplayer-vue3/compare/v0.3.0...v0.4.0) (2026-03-21)
+
+### Features
+
+* **vite-plugin:** 添加零配置自动导入支持并重命名控制属性 ([e358508](https://github.com/huangzida/easyplayer-vue3/commit/e358508fc33a811aa54440af8e65d527a12647fb))
+
+### Bug Fixes
+
+* 修复CSS注入和资源路径问题，优化构建配置 ([d44443c](https://github.com/huangzida/easyplayer-vue3/commit/d44443c65552f36f9407f5e70b11f36c8cad36aa))
+
 ## [0.3.0](https://github.com/huangzida/easyplayer-vue3/compare/v0.2.0...v0.3.0) (2026-03-20)
 
 ### Features
