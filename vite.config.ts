@@ -6,7 +6,7 @@ export default defineConfig(({ command }) => ({
   plugins: [
     vue(),
     dts({
-      include: ['src/index.ts', 'src/vite-plugin.ts'],
+      include: ['src/index.ts', 'src/vite-plugin.ts', 'src/auto-import.ts'],
     }),
   ],
   build: {
