@@ -27,15 +27,10 @@ export default defineConfig(({ command }) => ({
         /^node:.*/,
       ],
       output: {
-        hoistTransitiveImports: false,
+        assetFileNames: 'easyplayer-vue3.css',
       },
       treeshake: {
-        moduleSideEffects: (id) => {
-          if (id.includes('auto-import')) {
-            return true;
-          }
-          return false;
-        },
+        moduleSideEffects: () => true,
       },
     },
     cssCodeSplit: false,

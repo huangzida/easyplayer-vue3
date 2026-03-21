@@ -1,7 +1,13 @@
 import stylesText from './style.css?raw';
-const styleEl = document.createElement('style');
-styleEl.textContent = stylesText;
-document.head.appendChild(styleEl);
+
+let cssInjected = false;
 
 export * from './index';
 export { default } from './components/EasyPlayer/index.vue';
+
+if (typeof window !== 'undefined' && !cssInjected) {
+  const styleEl = document.createElement('style');
+  styleEl.textContent = stylesText;
+  document.head.appendChild(styleEl);
+  cssInjected = true;
+}

@@ -25,16 +25,17 @@ const getBasePath = (): string => {
     }
   }
 
+  const origin = window.location.origin;
   const pathname = window.location.pathname;
   const pathParts = pathname.split('/').filter(Boolean);
 
   if (pathParts.length > 0) {
     const lastPart = pathParts[pathParts.length - 1];
     if (lastPart && !lastPart.includes('.')) {
-      return `/${lastPart}/assets/easyplayer/`;
+      return `${origin}/assets/easyplayer/`;
     }
     const repoName = pathParts[0];
-    return `/${repoName}/assets/easyplayer/`;
+    return `${origin}/${repoName}/assets/easyplayer/`;
   }
 
   return '/assets/easyplayer/';

@@ -10,18 +10,18 @@
   overflow: hidden;
 }
 
-.easy-player :deep(video) {
+.easy-player video {
   width: 100%;
   height: 100%;
   object-fit: contain;
 }
 
-.easy-player :deep(.easyplayer-loading .easyplayer-loading-img),
-.easy-player :deep(.easyplayer-contextmenu-btn) {
+.easy-player .easyplayer-loading .easyplayer-loading-img,
+.easy-player .easyplayer-contextmenu-btn {
   display: none !important;
 }
 
-.easy-player.hide-controls :deep(.easyplayer-controls),
-.easy-player.hide-controls :deep(.easyplayer-loading .easyplayer-loading-img) {
+.easy-player.hide-controls .easyplayer-controls,
+.easy-player.hide-controls .easyplayer-loading .easyplayer-loading-img {
   display: none !important;
 }
