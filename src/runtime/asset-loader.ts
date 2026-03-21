@@ -29,13 +29,16 @@ const getBasePath = (): string => {
   const pathname = window.location.pathname;
   const pathParts = pathname.split('/').filter(Boolean);
 
+  const isGitHubPages = origin.includes('.github.io');
+  
   if (pathParts.length > 0) {
-    const lastPart = pathParts[pathParts.length - 1];
-    if (lastPart && !lastPart.includes('.')) {
-      return `${origin}/assets/easyplayer/`;
-    }
     const repoName = pathParts[0];
-    return `${origin}/${repoName}/assets/easyplayer/`;
+    
+    if (isGitHubPages) {
+      return `${origin}/${repoName}/assets/easyplayer/`;
+    }
+    
+    return '/assets/easyplayer/';
   }
 
   return '/assets/easyplayer/';
