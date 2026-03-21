@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/).
 
 
+## [0.4.2](https://github.com/huangzida/easyplayer-vue3/compare/v0.4.1...v0.4.2) (2026-03-21)
+
 ## [0.4.1](https://github.com/huangzida/easyplayer-vue3/compare/v0.4.0...v0.4.1) (2026-03-21)
 
 ### Bug Fixes
