@@ -31,7 +31,7 @@ const props = withDefaults(defineProps<EasyPlayerProps>(), {
   class: '',
   style: () => ({}),
   assetBaseUrl: '',
-  controlsVisible: false,
+  controls: false,
 });
 
 const emit = defineEmits<EasyPlayerEmits>();
@@ -52,13 +52,13 @@ const playerTimer = ref<number | null>(null);
 const vodPreset = {
   isLive: false,
   bufferTime: 1,
-  controlsVisible: true,
+  controls: true,
 };
 
 const livePreset = {
   isLive: true,
   bufferTime: 0.2,
-  controlsVisible: false,
+  controls: false,
 };
 
 const recordEvent = (event: string, data?: any) => {
@@ -525,7 +525,7 @@ defineExpose<EasyPlayerInstance>({
     class="easy-player"
     :class="[
       props.class,
-      { 'hide-controls': !props.controlsVisible }
+      { 'hide-controls': !props.controls }
     ]"
     :style="props.style"
     :data-url="props.url"

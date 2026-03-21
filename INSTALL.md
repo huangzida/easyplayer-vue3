@@ -1,23 +1,32 @@
 # Usage Guide
 
-## Basic Usage (Recommended)
+## Quick Start (Zero Configuration) ✨
 
-The package automatically loads the EasyPlayer runtime when needed. No manual setup required!
+The easiest way to use EasyPlayer - just one import and you're ready to go!
+
+### 1. Install the Vite Plugin
 
 ```typescript
-import { createApp } from 'vue';
-import EasyPlayer from 'easyplayer-vue3';
-import 'easyplayer-vue3/style.css';
+// vite.config.ts
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { easyplayerVue3Plugin } from 'easyplayer-vue3/vite-plugin';
 
-const app = createApp(App);
-app.component('EasyPlayer', EasyPlayer);
+export default defineConfig({
+  plugins: [
+    vue(),
+    easyplayerVue3Plugin(), // This handles everything automatically!
+  ],
+});
 ```
 
-**Or in SFC:**
+### 2. Import and Use
+
+**Zero configuration required!** Just import from `easyplayer-vue3/auto` - CSS is automatically included:
 
 ```vue
 <script setup lang="ts">
-import { EasyPlayer } from 'easyplayer-vue3';
+import { EasyPlayer } from 'easyplayer-vue3/auto';
 </script>
 
 <template>
@@ -28,7 +37,22 @@ import { EasyPlayer } from 'easyplayer-vue3';
 </template>
 ```
 
-## Global Plugin Installation
+That's it! No manual CSS imports, no script tags, no copying files!
+
+## Alternative Usage Patterns
+
+### Standard Import (With Manual CSS)
+
+If you prefer explicit imports:
+
+```vue
+<script setup lang="ts">
+import { EasyPlayer } from 'easyplayer-vue3';
+import 'easyplayer-vue3/style.css';
+</script>
+```
+
+### Global Plugin Installation
 
 ```typescript
 import { createApp } from 'vue';
@@ -46,6 +70,7 @@ If you need to control where assets are hosted, you can provide a custom asset b
 ```vue
 <script setup lang="ts">
 import { EasyPlayer } from 'easyplayer-vue3';
+import 'easyplayer-vue3/style.css';
 
 const customAssetBaseUrl = 'https://cdn.example.com/easyplayer-assets';
 </script>
@@ -59,11 +84,21 @@ const customAssetBaseUrl = 'https://cdn.example.com/easyplayer-assets';
 </template>
 ```
 
+## Plugin Options
+
+```typescript
+easyplayerVue3Plugin({
+  enabled: true,      // Enable/disable the plugin
+  verbose: true,      // Show/hide console logs
+});
+```
+
 ## How It Works
 
-1. **Automatic Detection**: When you import `easyplayer-vue3`, the component automatically loads runtime
-2. **Runtime Loading**: Dynamically loads `EasyPlayer-lib.js` and `EasyPlayer-pro.js` before mounting
-3. **Error Handling**: Logs errors to console if loading fails
+1. **Plugin (Recommended)**: Automatically copies EasyPlayer runtime assets
+2. **Auto-import Entry**: The `/auto` import includes CSS automatically - no extra imports needed
+3. **Runtime Loading**: Dynamically loads `EasyPlayer-lib.js` and `EasyPlayer-pro.js` before mounting
+4. **Error Handling**: Logs errors to console if loading fails
 
 ## Browser Requirements
 
@@ -77,16 +112,17 @@ const customAssetBaseUrl = 'https://cdn.example.com/easyplayer-assets';
 
 If you see errors like "Failed to load EasyPlayer runtime", check:
 
-1. **Network Tab**: Ensure `EasyPlayer-lib.js` is being requested
-2. **Console Errors**: Look for specific error messages
-3. **Asset Path**: Verify assets are in `./assets/easyplayer/` relative to your deployment
+1. **Using Plugin?**: Ensure you've added `easyplayerVue3Plugin()` to your vite config
+2. **Network Tab**: Ensure `EasyPlayer-lib.js` is being requested
+3. **Console Errors**: Look for specific error messages from the plugin
+4. **Asset Path**: Verify assets are in `./assets/easyplayer/` relative to your deployment
 
 ### Custom Deployment?
 
 If you deploy to a CDN or subdirectory, you may need to:
 
-1. Copy the `assets/easyplayer/` folder to your deployment
-2. Use the `assetBaseUrl` prop to point to the correct location
+1. The plugin will handle this automatically
+2. Or use the `assetBaseUrl` prop to point to the correct location
 
 ## CDN Usage
 

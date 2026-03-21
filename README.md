@@ -25,18 +25,53 @@ yarn add easyplayer-vue3
 pnpm add easyplayer-vue3
 ```
 
-## Quick Start
+## Quick Start ✨
 
-### Basic Usage
+### Zero Configuration (Recommended)
+
+The easiest way to use EasyPlayer - just install the Vite plugin and import!
+
+#### 1. Configure Vite Plugin
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { easyplayerVue3Plugin } from 'easyplayer-vue3/vite-plugin';
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    easyplayerVue3Plugin(), // Handles everything automatically!
+  ],
+});
+```
+
+#### 2. Import and Use
+
+**CSS is automatically included** - no extra imports needed:
 
 ```vue
 <script setup lang="ts">
-import { EasyPlayer } from 'easyplayer-vue3';
+import { EasyPlayer } from 'easyplayer-vue3/auto';
 </script>
 
 <template>
   <EasyPlayer url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" />
 </template>
+```
+
+That's it! No manual CSS imports, no copying files!
+
+### Standard Usage
+
+If you prefer explicit imports:
+
+```vue
+<script setup lang="ts">
+import { EasyPlayer } from 'easyplayer-vue3';
+import 'easyplayer-vue3/style.css';
+</script>
 ```
 
 ### Mode Presets
@@ -113,8 +148,8 @@ import { EasyPlayer } from 'easyplayer-vue3';
 
 **Mode preset parameters**:
 
-- **vod**: `isLive: false, bufferTime: 1, controlsVisible: true`
-- **live**: `isLive: true, bufferTime: 0.2, controlsVisible: false` (default)
+- **vod**: `isLive: false, bufferTime: 1, controls: true`
+- **live**: `isLive: true, bufferTime: 0.2, controls: false` (default)
 
 #### Basic Parameters
 
@@ -141,7 +176,7 @@ import { EasyPlayer } from 'easyplayer-vue3';
 | `webGpu` | `boolean` | - | WebGPU render |
 | `canvasRender` | `boolean` | - | Canvas render |
 | `stretch` | `boolean` | `false` | Stretch to fill |
-| `controlsVisible` | `boolean` | `false` | Show/hide control bar (true = show, false = hide) |
+| `controls` | `boolean` | `false` | Show/hide control bar (true = show, false = hide) |
 
 #### Playback Parameters
 

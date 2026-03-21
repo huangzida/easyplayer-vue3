@@ -51,7 +51,7 @@ export interface EasyPlayerConfig {
   watermark?: WatermarkConfig;
   fullWatermark?: FullWatermarkConfig;
   retry?: RetryConfig;
-  controlsVisible?: boolean;
+  controls?: boolean;
 }
 
 export interface EasyPlayerProps extends EasyPlayerConfig {

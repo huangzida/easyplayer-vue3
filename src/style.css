@@ -17,7 +17,11 @@
 }
 
 .easy-player :deep(.easyplayer-loading .easyplayer-loading-img),
-.easy-player :deep(.easyplayer-controls),
 .easy-player :deep(.easyplayer-contextmenu-btn) {
+  display: none !important;
+}
+
+.easy-player.hide-controls :deep(.easyplayer-controls),
+.easy-player.hide-controls :deep(.easyplayer-loading .easyplayer-loading-img) {
   display: none !important;
 }

@@ -208,7 +208,7 @@ const clearHistory = () => {
         :default-quality="defaultQuality || undefined"
         :watermark="watermark"
         :fallback-url="fallbackUrl || undefined"
-        :controls-visible="controlsVisible"
+        :controls="controlsVisible"
         @player-ready="handlePlayerReady"
         @play="handlePlay"
         @error="handleError"
@@ -246,7 +246,7 @@ const clearHistory = () => {
           v-model:default-quality="defaultQuality"
           v-model:watermark="watermark"
           v-model:fallback-url="fallbackUrl"
-          v-model:controls-visible="controlsVisible"
+          v-model:controls="controlsVisible"
         />
       </div>
 

@@ -25,18 +25,53 @@ yarn add easyplayer-vue3
 pnpm add easyplayer-vue3
 ```
 
-## 快速开始
+## 快速开始 ✨
 
-### 基础用法
+### 零配置使用（推荐）
+
+最简单的方式使用 EasyPlayer - 只需安装 Vite 插件并导入即可！
+
+#### 1. 配置 Vite 插件
+
+```typescript
+// vite.config.ts
+import { defineConfig } from 'vite';
+import vue from '@vitejs/plugin-vue';
+import { easyplayerVue3Plugin } from 'easyplayer-vue3/vite-plugin';
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    easyplayerVue3Plugin(), // 自动处理所有资源文件！
+  ],
+});
+```
+
+#### 2. 导入并使用
+
+**CSS 自动包含** - 无需额外导入：
 
 ```vue
 <script setup lang="ts">
-import { EasyPlayer } from 'easyplayer-vue3';
+import { EasyPlayer } from 'easyplayer-vue3/auto';
 </script>
 
 <template>
   <EasyPlayer url="https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8" />
 </template>
+```
+
+就这样！无需手动导入 CSS，无需复制文件！
+
+### 标准用法
+
+如果你更喜欢显式导入：
+
+```vue
+<script setup lang="ts">
+import { EasyPlayer } from 'easyplayer-vue3';
+import 'easyplayer-vue3/style.css';
+</script>
 ```
 
 ### 模式预设
@@ -113,8 +148,8 @@ import { EasyPlayer } from 'easyplayer-vue3';
 
 **模式预设参数**:
 
-- **vod**: `isLive: false, bufferTime: 1, controlsVisible: true`
-- **live**: `isLive: true, bufferTime: 0.2, controlsVisible: false`（默认）
+- **vod**: `isLive: false, bufferTime: 1, controls: true`
+- **live**: `isLive: true, bufferTime: 0.2, controls: false`（默认）
 
 #### 基础参数
 
@@ -141,7 +176,7 @@ import { EasyPlayer } from 'easyplayer-vue3';
 | `webGpu` | `boolean` | - | WebGPU 渲染 |
 | `canvasRender` | `boolean` | - | Canvas 渲染 |
 | `stretch` | `boolean` | `false` | 拉伸填充容器 |
-| `controlsVisible` | `boolean` | `false` | 控制栏显隐（true 显示，false 隐藏） |
+| `controls` | `boolean` | `false` | 控制栏显隐（true 显示，false 隐藏） |
 
 #### 播放参数
 
