@@ -5,6 +5,7 @@ export interface EasyPlayerAssetUrls {
 }
 
 let loaded = false;
+let loadingPromise: Promise<void> | null = null;
 
 export const defaultAssetUrls: EasyPlayerAssetUrls = {
   lib: 'EasyPlayer-lib.js',
@@ -51,6 +52,13 @@ export const ensureEasyPlayerRuntime = async (
     return defaultAssetUrls;
   }
 
+  if (loadingPromise) {
+    await loadingPromise;
+    if ((window as any).EasyPlayerPro) {
+      return defaultAssetUrls;
+    }
+  }
+
   const baseUrl = assetBaseUrl
     ? `${assetBaseUrl.replace(/\/$/, '')}/`
     : getBasePath();
@@ -65,7 +73,8 @@ export const ensureEasyPlayerRuntime = async (
 
   const loadScript = (src: string): Promise<void> => {
     return new Promise((resolve, reject) => {
-      if (document.querySelector(`script[src="${src}"]`)) {
+      const existingScript = document.querySelector(`script[src="${src}"]`);
+      if (existingScript) {
         resolve();
         return;
       }
@@ -81,14 +90,19 @@ export const ensureEasyPlayerRuntime = async (
     });
   };
 
-  try {
-    // await loadScript(assetUrls.lib);
-    await loadScript(assetUrls.pro);
-    loaded = true;
-  } catch (error) {
-    console.error('[EasyPlayer Vue3] Failed to load runtime:', error);
-    throw error;
-  }
+  loadingPromise = (async () => {
+    try {
+      await loadScript(assetUrls.pro);
+      loaded = true;
+    } catch (error) {
+      console.error('[EasyPlayer Vue3] Failed to load runtime:', error);
+      throw error;
+    } finally {
+      loadingPromise = null;
+    }
+  })();
+
+  await loadingPromise;
 
   return assetUrls;
 };
