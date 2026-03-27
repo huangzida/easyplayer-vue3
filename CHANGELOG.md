@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/).
 
 
+## [0.4.3](https://github.com/huangzida/easyplayer-vue3/compare/v0.4.2...v0.4.3) (2026-03-27)
+
+### Bug Fixes
+
+* **asset-loader:** 防止重复加载脚本并添加加载状态追踪 ([8fa04a4](https://github.com/huangzida/easyplayer-vue3/commit/8fa04a430adbcff88611aa30a72a1f18c2c8dee7))
+
 ## [0.4.2](https://github.com/huangzida/easyplayer-vue3/compare/v0.4.1...v0.4.2) (2026-03-21)
 
 ## [0.4.1](https://github.com/huangzida/easyplayer-vue3/compare/v0.4.0...v0.4.1) (2026-03-21)
