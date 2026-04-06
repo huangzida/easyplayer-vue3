@@ -2,6 +2,9 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md)
 
+[![npm version](https://img.shields.io/npm/v/easyplayer-vue3.svg)](https://www.npmjs.com/package/easyplayer-vue3)
+[![npm downloads](https://img.shields.io/npm/dm/easyplayer-vue3.svg)](https://www.npmjs.com/package/easyplayer-vue3)
+
 基于 EasyPlayerPro 的 Vue 3 组件封装，提供类型化的 props、事件和实例方法。
 
 ## 特性

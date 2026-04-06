@@ -2,6 +2,9 @@
 
 [English](./README.md) | [中文](./README.zh-CN.md)
 
+[![npm version](https://img.shields.io/npm/v/easyplayer-vue3.svg)](https://www.npmjs.com/package/easyplayer-vue3)
+[![npm downloads](https://img.shields.io/npm/dm/easyplayer-vue3.svg)](https://www.npmjs.com/package/easyplayer-vue3)
+
 Vue 3 component wrapper for EasyPlayerPro with typed props, events, and instance methods.
 
 ## Features
