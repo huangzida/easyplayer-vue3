@@ -75,7 +75,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "typecheck": "vue-tsc --noEmit",
-    "verify": "pnpm lint && pnpm typecheck && pnpm build && pnpm build:docs && pnpm publint",
+    "verify": "pnpm lint && pnpm typecheck && pnpm test",
     "copy-assets": "node scripts/sync-easyplayer-assets.mjs docs/public docs/.vitepress/dist playground/public"
   },
   "peerDependencies": {
