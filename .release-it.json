@@ -48,7 +48,8 @@
       },
       "infile": "CHANGELOG.md",
       "header": "# Changelog\n",
-      "ignoreCommitPatterns": ["^WIP:", "^dump:", "^chore\\(release\\):"]
+      "ignoreCommitPatterns": ["^WIP:", "^dump:", "^chore\\(release\\):"],
+      "ignoreRecommendedBump": true
     }
   },
   "hooks": {
