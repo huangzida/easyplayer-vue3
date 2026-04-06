@@ -15,16 +15,7 @@
     "skipChecks": true
   },
   "github": {
-    "release": true,
-    "releaseName": "v${version}",
-    "autoGenerate": true,
-    "preRelease": false,
-    "draft": false,
-    "comments": {
-      "submit": true,
-      "issue": "Released in [v${version}](${releaseUrl})",
-      "pr": "Released in [v${version}](${releaseUrl})"
-    }
+    "release": false
   },
   "plugins": {
     "@release-it/conventional-changelog": {
