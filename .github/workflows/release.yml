@@ -3,7 +3,13 @@ name: Release Package
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version number (e.g., 1.0.0)"
+        required: true
+        type: string
 
 permissions:
   contents: write
@@ -24,9 +30,9 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
-          registry-url: 'https://registry.npmjs.org'
+          registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
@@ -34,17 +40,11 @@ jobs:
       - name: Validate tag
         run: pnpm release:check
 
-      - name: Verify package
-        run: |
-          pnpm build
-          pnpm lint
-          pnpm typecheck
-          pnpm test
-          pnpm publint
-          pnpm pack:check
+      - name: Verify
+        run: pnpm verify
 
       - name: Publish to npm
-        run: npm publish --access public --provenance
+        run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 

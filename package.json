@@ -57,7 +57,9 @@
     "*.css"
   ],
   "publishConfig": {
-    "access": "public"
+    "access": "public",
+    "provenance": true,
+    "git-checks": false
   },
   "scripts": {
     "dev": "node scripts/sync-playground.mjs && vite --config playground/vite.config.ts",
