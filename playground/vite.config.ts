@@ -12,9 +12,7 @@ export default defineConfig({
   base: isGithubPages ? `/${repoName}/` : '/',
   plugins: [
     vue(),
-    easyplayerVue3Plugin({
-      verbose: true,
-    }),
+    easyplayerVue3Plugin(),
   ],
   publicDir: fileURLToPath(new URL('./public', import.meta.url)),
   resolve: {

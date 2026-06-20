@@ -89,16 +89,16 @@ const customAssetBaseUrl = 'https://cdn.example.com/easyplayer-assets';
 ```typescript
 easyplayerVue3Plugin({
   enabled: true,      // Enable/disable the plugin
-  verbose: true,      // Show/hide console logs
 });
 ```
 
 ## How It Works
 
-1. **Plugin (Recommended)**: Automatically copies EasyPlayer runtime assets
-2. **Auto-import Entry**: The `/auto` import includes CSS automatically - no extra imports needed
-3. **Runtime Loading**: Dynamically loads `EasyPlayer-lib.js` and `EasyPlayer-pro.js` before mounting
-4. **Error Handling**: Logs errors to console if loading fails
+1. **Dev**: The plugin registers middleware that serves runtime assets on-demand from `node_modules/`, intercepting requests to `/assets/easyplayer/**`. No files are written to `public/`.
+2. **Build**: The plugin copies runtime assets to `<outDir>/assets/easyplayer/` in the `writeBundle` hook (after Vite's `emptyOutDir` runs, so files are preserved).
+3. **Auto-import Entry**: The `/auto` import includes CSS automatically - no extra imports needed
+4. **Runtime Loading**: Dynamically loads `EasyPlayer-lib.js` and `EasyPlayer-pro.js` before mounting
+5. **Error Handling**: Logs errors to console if loading fails
 
 ## Browser Requirements
 
@@ -113,15 +113,15 @@ easyplayerVue3Plugin({
 If you see errors like "Failed to load EasyPlayer runtime", check:
 
 1. **Using Plugin?**: Ensure you've added `easyplayerVue3Plugin()` to your vite config
-2. **Network Tab**: Ensure `EasyPlayer-lib.js` is being requested
-3. **Console Errors**: Look for specific error messages from the plugin
-4. **Asset Path**: Verify assets are in `./assets/easyplayer/` relative to your deployment
+2. **Package Installed?**: The plugin reads assets from `node_modules/easyplayer-vue3/dist/assets/easyplayer/`. Run `pnpm install` if missing.
+3. **Network Tab**: Ensure `EasyPlayer-lib.js` is being requested from `/assets/easyplayer/`
+4. **Console Errors**: Look for specific error messages from the plugin
 
 ### Custom Deployment?
 
 If you deploy to a CDN or subdirectory, you may need to:
 
-1. The plugin will handle this automatically
+1. The plugin will handle this automatically (build copies to `<outDir>/assets/easyplayer/`)
 2. Or use the `assetBaseUrl` prop to point to the correct location
 
 ## CDN Usage

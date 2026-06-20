@@ -285,7 +285,13 @@ EasyPlayer.js 原生参数使用大驼峰/全大写，Vue 组件层转换为小�
 - `EasyPlayer-pro.js` - 专业版播放器
 - `EasyPlayer-pro.wasm` - WebAssembly 模块
 
-资源文件应放在部署目录的 `public/assets/easyplayer/` 下。可以自定义基础路径：
+**Vite 插件会自动处理一切 —— 无需手动拷贝文件：**
+- **开发环境**：资源通过 middleware 从 `node_modules/` 实时提供，请求路径为 `/assets/easyplayer/**`
+- **构建产物**：资源在产物写入后拷贝到 `<outDir>/assets/easyplayer/`
+
+> **注意**：**无需**将这些文件放到 `public/` 目录。插件直接从已安装的包中读取资源。
+
+如果使用 CDN 或自定义托管，可通过 `assetBaseUrl` prop 覆盖基础路径：
 
 ```vue
 <EasyPlayer

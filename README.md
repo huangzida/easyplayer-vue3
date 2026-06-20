@@ -285,7 +285,13 @@ The component automatically loads EasyPlayer runtime resources:
 - `EasyPlayer-pro.js` - Pro player
 - `EasyPlayer-pro.wasm` - WebAssembly module
 
-Resource files should be placed in `public/assets/easyplayer/` of your deployment. You can customize the base path:
+**The Vite plugin handles everything automatically — no manual file copying needed:**
+- **Dev**: Resources are served on-demand from `node_modules/` via middleware at `/assets/easyplayer/**`
+- **Build**: Resources are copied to `<outDir>/assets/easyplayer/` after the bundle is written
+
+> **Note**: You do **not** need to place these files in `public/`. The plugin reads them directly from the installed package.
+
+For CDN or custom hosting, override the base path via the `assetBaseUrl` prop:
 
 ```vue
 <EasyPlayer
