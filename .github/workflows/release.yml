@@ -40,6 +40,9 @@ jobs:
       - name: Validate tag
         run: pnpm release:check
 
+      - name: Build library
+        run: pnpm build
+
       - name: Verify
         run: pnpm verify
 
