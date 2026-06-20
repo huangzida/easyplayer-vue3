@@ -1,5 +1,12 @@
 # Changelog
 
+
+## [0.4.4](https://github.com/huangzida/easyplayer-vue3/compare/v0.4.3...v0.4.4) (2026-06-20)
+
+### ✨ Features
+
+* **vite-plugin:** 重构插件并更新文档以实现自动资源处理 ([eab9aab](https://github.com/huangzida/easyplayer-vue3/commit/eab9aab9d0289f1563f138c87d062b8a17159766))
+
 All notable changes to this project will be documented in this file.
 
 The format is based on [Conventional Commits](https://www.conventionalcommits.org/).
